@@ -11,6 +11,13 @@ Intégration : chaque voix/<id>.flac est rognée de ses silences de début et de
 audio/<id>.mp3 (mono, 24 kHz, 56 kbit/s) et sa durée est reportée dans audio/clips.json.
 Lancer ensuite python3 build.py.
 
+Avec ElevenLabs (voix clonée ; l'identifiant de voix reste hors du dépôt) :
+  export ELEVENLABS_API_KEY=...  ELEVENLABS_VOICE_ID=...
+  python3 generer_voix.py --moteur elevenlabs            # voix_el/<id>.mp3 (44,1 kHz), puis intégration
+  python3 generer_voix.py --moteur elevenlabs --seulement n3,tl_a
+  python3 generer_voix.py --moteur elevenlabs --integrer
+L'intégration encode alors en mono 44,1 kHz 80 kbit/s et signale les clips de durée suspecte.
+
 Options : --voix coral|marin|cedar|nova|shimmer|sage|...   --modele gpt-4o-mini-tts
 Reprise automatique : les fichiers déjà présents dans voix/ ne sont pas regénérés.
 Python 3.8+, ffmpeg et ffprobe pour l'intégration.
@@ -26,17 +33,26 @@ CONSIGNE = ("Tu es une conteuse française, originaire de France, qui parle à u
 ESSAI = ["bonjour_lou", "pro_1", "tl_l", "ml_m", "n3", "w_p_0", "eq_3_2", "don_4", "cp_b"]
 ICI = os.path.dirname(os.path.abspath(__file__))
 EXT = ".flac"
+# par moteur : dossier des originaux, extension, encodage final (fréquence, débit)
+MOTEURS = {"openai": ("voix", ".flac", "24000", "56k"), "elevenlabs": ("voix_el", ".mp3", "44100", "80k")}
+FREQ, DEBIT = "24000", "56k"
 
 
 def synth(key, modele, voix, ident, texte, dossier):
     cible = os.path.join(dossier, ident + EXT)
     if os.path.exists(cible) and os.path.getsize(cible) > 200:
         return ident, True
-    corps = json.dumps({"model": modele, "voice": voix, "input": texte,
-                        "instructions": CONSIGNE, "response_format": "flac"}).encode()
+    if EXT == ".mp3":  # ElevenLabs
+        url = "https://api.elevenlabs.io/v1/text-to-speech/" + voix + "?output_format=mp3_44100_128"
+        corps = json.dumps({"text": texte, "model_id": modele}).encode()
+        entetes = {"xi-api-key": key, "Content-Type": "application/json"}
+    else:
+        url = "https://api.openai.com/v1/audio/speech"
+        corps = json.dumps({"model": modele, "voice": voix, "input": texte,
+                            "instructions": CONSIGNE, "response_format": "flac"}).encode()
+        entetes = {"Authorization": "Bearer " + key, "Content-Type": "application/json"}
     for essai in range(6):
-        req = urllib.request.Request("https://api.openai.com/v1/audio/speech", data=corps,
-              headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"})
+        req = urllib.request.Request(url, data=corps, headers=entetes)
         try:
             with urllib.request.urlopen(req, timeout=120) as r:
                 data = r.read()
@@ -108,8 +124,8 @@ def integrer(ids, dossier):
 
     def un(i):
         src, dst = os.path.join(dossier, i + EXT), os.path.join(ICI, "audio", i + ".mp3")
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", src, "-af", rognage, "-ac", "1", "-ar", "24000",
-                        "-c:a", "libmp3lame", "-b:a", "56k", "-map_metadata", "-1", "-id3v2_version", "0",
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", src, "-af", rognage, "-ac", "1", "-ar", FREQ,
+                        "-c:a", "libmp3lame", "-b:a", DEBIT, "-map_metadata", "-1", "-id3v2_version", "0",
                         "-write_xing", "1", dst], check=True)
         d = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", dst],
                            capture_output=True, text=True).stdout.strip()
@@ -124,6 +140,11 @@ def integrer(ids, dossier):
     vides = sorted(i for i, d in durees.items() if d < 0.3)
     if vides:
         sys.exit(f"audio vide ou tronqué, clips.json inchangé. Refaire avec --seulement {','.join(vides)}")
+    # durée très différente de la version précédente : phrase peut-être avalée ou allongée, à écouter
+    suspects = [(c[0], c[1], durees[c[0]]) for c in clips
+                if c[0] in durees and c[1] > 0 and not (0.45 <= durees[c[0]] / c[1] <= 2.2)]
+    if suspects:
+        print(f"{len(suspects)} durées suspectes (id, avant, après) :", " ".join(f"{i}:{a}->{d}" for i, a, d in suspects))
     for c in clips:
         if c[0] in durees:
             c[1] = durees[c[0]]
@@ -135,7 +156,8 @@ def integrer(ids, dossier):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--voix", default="coral", help="une voix, ou plusieurs séparées par des virgules avec --essai")
-    ap.add_argument("--modele", default="gpt-4o-mini-tts")
+    ap.add_argument("--modele", default="")
+    ap.add_argument("--moteur", default="openai", choices=list(MOTEURS))
     ap.add_argument("--essai", action="store_true")
     ap.add_argument("--seulement", default="")
     ap.add_argument("--integrer", action="store_true", help="seulement convertir voix/ vers audio/")
@@ -143,7 +165,13 @@ def main():
     a = ap.parse_args()
     with open(os.path.join(ICI, "phrases.json"), encoding="utf-8") as f:
         phrases = json.load(f)
-    dossier = os.path.join(ICI, "voix")
+    global EXT, FREQ, DEBIT
+    nom_dossier, EXT, FREQ, DEBIT = MOTEURS[a.moteur]
+    el = a.moteur == "elevenlabs"
+    a.modele = a.modele or ("eleven_v3" if el else "gpt-4o-mini-tts")
+    if el and not a.integrer:
+        a.voix = os.environ.get("ELEVENLABS_VOICE_ID") or sys.exit("Définis ELEVENLABS_VOICE_ID.")
+    dossier = os.path.join(ICI, nom_dossier)
     seulement = [i.strip() for i in a.seulement.split(",") if i.strip()]
     inconnus = [i for i in seulement if i not in phrases]
     if inconnus:
@@ -154,9 +182,12 @@ def main():
         if manquants:
             sys.exit(f"{len(manquants)} fichiers manquants dans voix/ : {manquants[:10]}")
         return integrer(ids, dossier)
-    key = os.environ.get("OPENAI_API_KEY")
+    variable = "ELEVENLABS_API_KEY" if el else "OPENAI_API_KEY"
+    key = os.environ.get(variable)
     if not key:
-        sys.exit("Définis OPENAI_API_KEY.")
+        sys.exit(f"Définis {variable}.")
+    if el and a.essai:
+        sys.exit("--essai n'existe qu'avec OpenAI.")
     voix_liste = [v.strip() for v in a.voix.split(",") if v.strip()]
     if a.essai:
         for v in voix_liste:
