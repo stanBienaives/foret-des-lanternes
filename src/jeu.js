@@ -72,7 +72,7 @@ const BEAD=["","#d6352b","#3aa655","#f29ab8","#f2cf3a","#6ec3ea","#9a62c4","#f6f
 /* ---------- sauvegarde ---------- */
 const KEY="foret-de-plume-v1";
 const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");};
-const S={name:"Lou",lim:"chapitre",chap:"",minutes:15,style:"script",sound:true,vm:"auto",vname:"",unlock:false,done:{},epoch:0,day:today(),used:0,bonus:0,ts:0,seen:false};
+const S={name:"Lou",lim:"chapitre",chap:"",minutes:15,style:"script",sound:true,music:true,vm:"auto",vname:"",unlock:false,done:{},epoch:0,day:today(),used:0,bonus:0,ts:0,seen:false};
 function rollDay(){ if(S.day!==today()){S.day=today();S.used=0;S.bonus=0;return true;} return false; }
 function saveLocal(){ try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} }
 try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&typeof r==="object")Object.assign(S,r);}catch(e){}
@@ -126,7 +126,7 @@ function keepAlive(){
     if(unmute.paused){const p=unmute.play();if(p&&p.catch)p.catch(()=>{});}
   }catch(e){}
 }
-function ctx(){keepAlive();if(!ac){try{if(navigator.audioSession)navigator.audioSession.type="playback";}catch(e){}ac=new (window.AudioContext||window.webkitAudioContext)();}if(ac.state==="suspended")ac.resume();return ac;}
+function ctx(){keepAlive();if(!ac){try{if(navigator.audioSession)navigator.audioSession.type="playback";}catch(e){}ac=new (window.AudioContext||window.webkitAudioContext)();}if(ac.state==="suspended")ac.resume();if(!MUS.timer)setTimeout(musMaj,60);return ac;}
 /* Deux modes : fichier unique (window.CLIPS = { id: [durée, mp3 en base64] }) ou fichiers séparés
    (window.DUR = { id: durée }, son dans audio/<nom>.mp3, chargé à la demande). */
 const DUR=window.DUR||{};
@@ -151,7 +151,7 @@ function precharge(st){
 }
 const flat=ids=>[].concat(ids).flat().filter(Boolean);
 const clipDur=ids=>flat(ids).reduce((t,id)=>t+(((window.CLIPS||{})[id]||[DUR[id]||1.5])[0]+.15),0);
-function hush(){sayTok++;playing.forEach(x=>{try{x.stop();}catch(e){}});playing=[];}
+function hush(){sayTok++;playing.forEach(x=>{try{x.stop();}catch(e){}});playing=[];if(ac)MUS.duck=Math.min(MUS.duck,ac.currentTime+.4);}
 async function say(...ids){
   ids=flat(ids);hush();
   if(S.vm==="off"||!ids.length) return;
@@ -159,6 +159,7 @@ async function say(...ids){
   try{ctx();const bs=await Promise.all(ids.map(loadClip));if(t!==sayTok) return;
     let when=ac.currentTime+.04;
     for(const b of bs){if(!b)continue;const src=ac.createBufferSource();src.buffer=b;src.connect(ac.destination);src.start(when);when+=b.duration+.15;playing.push(src);}
+    MUS.duck=when;musMaj();
   }catch(e){}
 }
 function tone(f,d,type,g,when){
@@ -173,6 +174,56 @@ const fx={
   no:()=>tone(233,.22,"sine",.06),
   win:()=>[523,659,784,1047,1319].forEach((f,i)=>tone(f,.45,"triangle",.09,i*.11))
 };
+
+/* ---------- musique d'ambiance ---------- */
+/* Fabriquée par le jeu, sans fichier : nappe d'accords très lente et notes de boîte à musique avec écho.
+   Elle joue pendant l'histoire et sur la carte, se tait pendant les exercices (l'enfant doit entendre les sons
+   des lettres) et s'efface sous la voix. musMesure(c,out,t,k) écrit la mesure k à l'instant t dans le contexte c. */
+const MUS={g:null,out:null,timer:null,next:0,k:0,duck:0,pos:2,VOL:.55,MES:6.4};
+const MUS_ACC=[[146.83,220,369.99],[123.47,185,293.66],[98,196,293.66],[110,164.81,277.18]]; /* ré, si mineur, sol, la */
+const MUS_GAMME=[587.33,659.25,739.99,880,987.77,1174.66,1318.51]; /* ré majeur pentatonique */
+function musSortie(c,dest){
+  const out=c.createGain(),lp=c.createBiquadFilter(),del=c.createDelay(1),fb=c.createGain(),wet=c.createGain();
+  lp.type="lowpass";lp.frequency.value=2400;del.delayTime.value=.48;fb.gain.value=.38;wet.gain.value=.45;
+  out.connect(lp);lp.connect(dest);lp.connect(del);del.connect(fb);fb.connect(del);del.connect(wet);wet.connect(dest);
+  return out;
+}
+function musNote(c,out,f,t,att,dur,vol,type,det){
+  const o=c.createOscillator(),a=c.createGain();o.type=type;o.frequency.value=f;if(det)o.detune.value=det;
+  a.gain.setValueAtTime(.0001,t);a.gain.linearRampToValueAtTime(vol,t+att);
+  if(att>1) a.gain.setTargetAtTime(.0001,t+dur*.55,dur*.16); else a.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  o.connect(a);a.connect(out);o.start(t);o.stop(t+dur+.1);
+}
+function musMesure(c,out,t,k){
+  const M=MUS.MES;
+  MUS_ACC[k%4].forEach(f=>{musNote(c,out,f,t,2.2,M*1.5,.034,"sine",-5);musNote(c,out,f,t,2.2,M*1.5,.034,"sine",5);});
+  /* mélodie : promenade sur la gamme, 2 à 4 notes par mesure, une mesure sur cinq laissée vide */
+  if(k%5===4) return;
+  for(let i=0;i<8;i++){
+    if(Math.random()>(i%2?.22:.5)) continue;
+    MUS.pos=Math.max(0,Math.min(MUS_GAMME.length-1,MUS.pos+[-2,-1,-1,1,1,2][Math.floor(Math.random()*6)]));
+    const f=MUS_GAMME[MUS.pos],tt=t+i*M/8;
+    musNote(c,out,f,tt,.012,2.4,.05,"sine");musNote(c,out,f*2,tt,.008,1.1,.012,"sine");
+  }
+}
+function musPlan(){
+  if(!ac||!MUS.out) return;
+  while(MUS.next<ac.currentTime+2.5){musMesure(ac,MUS.out,MUS.next,MUS.k++);MUS.next+=MUS.MES;}
+}
+/* règle le volume selon l'écran, le réglage et la voix en cours ; appelée à chaque changement */
+function musMaj(){
+  if(!ac||ac.state!=="running") return;
+  const on=S.music!==false&&document.visibilityState==="visible"&&screen!=="play";
+  try{
+    if(!MUS.g){if(!on) return;MUS.g=ac.createGain();MUS.g.gain.value=0;MUS.g.connect(ac.destination);MUS.out=musSortie(ac,MUS.g);}
+    const now=ac.currentTime,g=MUS.g.gain,v=g.value,base=on?MUS.VOL:0;
+    g.cancelScheduledValues(now);g.setValueAtTime(v,now);
+    if(on&&now<MUS.duck){g.setTargetAtTime(base*.35,now,.12);g.setTargetAtTime(base,MUS.duck,.6);}
+    else g.setTargetAtTime(base,now,on?.9:.25);
+    if(on&&!MUS.timer){MUS.next=Math.max(MUS.next,now+.15);MUS.timer=setInterval(musPlan,1000);musPlan();}
+    if(!on&&MUS.timer){clearInterval(MUS.timer);MUS.timer=null;}
+  }catch(e){}
+}
 
 /* ---------- temps de jeu ---------- */
 /* limite du jour : "chapitre" = Plume va dormir quand un chapitre vient d'être terminé (S.chap = ce jour-là),
@@ -192,6 +243,7 @@ setInterval(()=>{
   }
 },1000);
 document.addEventListener("visibilitychange",()=>{
+  musMaj();
   if(document.visibilityState==="hidden"){hush();try{if(unmute)unmute.pause();}catch(e){}saveLocal();pushRemote();}
   else{ if(rollDay()&&screen==="sleep") showStart(); updateSun(); }
 });
@@ -201,7 +253,7 @@ let screen="start", cur=null, tok=0;
 const view=$("#view");
 const fmt=l=>S.style==="maj"?String(l).toUpperCase():String(l);
 function applyStyle(){document.body.dataset.style=S.style;}
-function setScreen(n,...kids){screen=n;tok++;hush();$("#home").hidden=(n!=="play");view.replaceChildren(...kids);view.scrollTop=0;}
+function setScreen(n,...kids){screen=n;tok++;hush();$("#home").hidden=(n!=="play");view.replaceChildren(...kids);view.scrollTop=0;musMaj();}
 const doneCount=()=>STOPS.filter(s=>S.done[s.id]).length;
 const curIndex=()=>{const i=STOPS.findIndex(s=>!S.done[s.id]);return i<0?STOPS.length:i;};
 const unlocked=i=>S.unlock||i===0||!!S.done[STOPS[i].id]||!!S.done[STOPS[i-1].id];
@@ -542,6 +594,16 @@ function settings(){
   name.addEventListener("change",()=>{S.name=name.value.trim()||"Lou";touch();});
   const chips=(key,opts)=>h("div",{class:"chips"},opts.map(([v,lab])=>h("button",{"aria-pressed":String(S[key]===v),onclick:()=>{S[key]=v;touch();settings();}},lab)));
   const used=Math.round(S.used/60);
+  /* reprise à un chapitre (changement d'appareil) : tout ce qui précède est marqué fait, le reste est à faire */
+  const ici=Math.min(curIndex()<STOPS.length?STOPS[curIndex()].ci:CH.length-1,CH.length-1);
+  const chapSel=h("select",{"aria-label":"Chapitre"},CH.map((c,k)=>h("option",{value:String(k)},`${k+1} · ${c.n}`)));chapSel.value=String(ici);
+  const chapBtn=h("button",{class:"btn",onclick:()=>{
+    const k=+chapSel.value,perdu=STOPS.filter(st=>st.ci>=k&&S.done[st.id]).length;
+    if(perdu&&chapBtn.dataset.sure!==String(k)){chapBtn.dataset.sure=String(k);chapBtn.classList.add("warn");chapBtn.textContent=`Confirmer : ${perdu} étape${perdu>1?"s":""} à refaire`;return;}
+    STOPS.forEach(st=>{if(st.ci<k)S.done[st.id]=S.done[st.id]||1;else delete S.done[st.id];});
+    S.chap="";S.seen=true;S.epoch=Date.now();touch();dlg.close();showStart();
+  }},"Aller à ce chapitre");
+  chapSel.addEventListener("change",()=>{delete chapBtn.dataset.sure;chapBtn.classList.remove("warn");chapBtn.textContent="Aller à ce chapitre";});
   dlg.replaceChildren(
     h("h2",null,"Espace parents"),
     h("label",null,"Prénom de l’enfant"),name,
@@ -554,6 +616,10 @@ function settings(){
     h("div",{class:"chips"},[["auto","Activée"],["off","Coupée"]].map(([v,lab])=>h("button",{"aria-pressed":String((S.vm!=="off")===(v!=="off")),onclick:()=>{S.vm=v;touch();settings();if(v!=="off")say("bonjour");}},lab))),
     h("div",{class:"lab"},"Petits sons du jeu"),
     chips("sound",[[true,"Activés"],[false,"Coupés"]]),
+    h("div",{class:"lab"},"Musique d’ambiance"),
+    h("div",{class:"chips"},[[true,"Activée"],[false,"Coupée"]].map(([v,lab])=>h("button",{"aria-pressed":String((S.music!==false)===v),onclick:()=>{S.music=v;touch();settings();musMaj();}},lab))),
+    h("div",{class:"lab"},"Reprendre à un chapitre (changement d’appareil)"),
+    h("div",{class:"line",style:"margin-top:0"},chapSel,chapBtn),
     h("div",{class:"lab"},"Étapes"),
     chips("unlock",[[false,"Dans l’ordre"],[true,"Tout ouvrir"]]),
     h("div",{class:"line"},

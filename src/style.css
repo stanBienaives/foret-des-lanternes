@@ -166,6 +166,7 @@ dialog{border:0;border-radius:24px;padding:22px;width:min(92vw,440px);max-height
 dialog::backdrop{background:rgba(20,24,48,.6)}
 dialog h2{margin-bottom:12px}
 dialog label,dialog .lab{display:block;font-size:.9rem;color:var(--soft);margin:16px 0 6px}
+dialog select{font:inherit;font-size:1rem;flex:1 1 180px;min-width:0;padding:9px 10px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
 dialog input[type=text],dialog input[type=number]{font:inherit;font-size:1.1rem;width:100%;padding:10px 12px;border-radius:12px;border:2px solid var(--line);
   background:var(--bg);color:var(--ink)}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
