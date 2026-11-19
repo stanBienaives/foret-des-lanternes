@@ -15,11 +15,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  publier:
+  # Deux tâches séparées : l'archive envoyée par la première n'est visible par le déploiement
+  # qu'une fois cette tâche terminée (dans une tâche unique, le déploiement échouait une fois sur deux).
+  construire:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deploiement.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -31,5 +30,12 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
+  publier:
+    needs: construire
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploiement.outputs.page_url }}
+    steps:
       - id: deploiement
         uses: actions/deploy-pages@v4
