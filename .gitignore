@@ -1,0 +1,23 @@
+# générés par build.py
+dist/
+jeu.html
+
+# intermédiaires lourds, régénérables ou propres à cette machine
+images/brut/
+voix/
+voix_essai/
+voix.zip
+ecoute.html
+propositions/
+
+# jamais de secrets dans le dépôt
+.env
+.env.*
+*.key
+*.pem
+
+__pycache__/
+.DS_Store
+
+# notes personnelles, gardées en local
+CLAUDE.md

@@ -1,0 +1,146 @@
+[
+ {
+  "nom": "c1_fond",
+  "taille": "1024x1536",
+  "prompt": "Art for a premium 2.5D side-scrolling mobile adventure game for young children: polished painterly 3D render look, magical night forest world, saturated blues, violets and turquoise with warm golden glowing lights, bioluminescent mushrooms and flowers, fireflies, soft mist, cozy and wondrous, never scary. Vertical portrait composition. All important things stay in the central 60% of the width. A forest stream at night under a bright moon in the upper part of the image, purple-blossomed trees and willow branches framing the sides, a small waterfall in the background feeding the stream. Across the middle of the image, slightly below center, a wide flat mossy riverbank like a stage, with one large flat grey rock sitting on its right half. On the bank, right of center, stands a wooden post with a hanging lantern glowing warm gold, lighting the ground around it. Below the bank, the lower third of the image is a wide calm open stretch of sparkling blue water seen slightly from above, with empty water surface (no lily pads), and a few glowing plants in the bottom corners. The stage is EMPTY: no people, no characters, no animals anywhere. No text, no UI."
+ },
+ {
+  "nom": "c2_fond",
+  "taille": "1024x1536",
+  "prompt": "Art for a premium 2.5D side-scrolling mobile adventure game for young children: polished painterly 3D render look, magical night forest world, saturated blues, violets and turquoise with warm golden glowing lights, bioluminescent mushrooms and flowers, fireflies, soft mist, cozy and wondrous, never scary. Vertical portrait composition. All important things stay in the central 60% of the width. An old mossy stone footbridge with a low parapet crossing the image horizontally slightly below center, seen from the side, its flat walkway like a wide stage, a river flowing far below it with glowing plants on the banks. In the sky above the bridge, a huge rainbow arc that has lost all its colors: it is entirely pale grey and washed out. The night sky is covered with soft blue-grey clouds hiding the stars, a moon glowing dimly behind clouds. On the bridge, right of center, stands a wooden post with a hanging lantern glowing warm gold, lighting the ground around it. The bridge itself has several small unlit lanterns hanging along its parapet. The stage is EMPTY: no people, no characters, no animals anywhere. No text, no UI."
+ },
+ {
+  "nom": "c3_fond",
+  "taille": "1024x1536",
+  "prompt": "Art for a premium 2.5D side-scrolling mobile adventure game for young children: polished painterly 3D render look, magical night forest world, saturated blues, violets and turquoise with warm golden glowing lights, bioluminescent mushrooms and flowers, fireflies, soft mist, cozy and wondrous, never scary. Vertical portrait composition. All important things stay in the central 60% of the width. Inside a big friendly cave with purple and blue rock walls, stalactites at the top, a few faint glowing mushrooms. Across the middle of the image, slightly below center, a wide flat stone floor like a stage. In the center of the back wall, above the stage, a large round stone door made of fitted boulders, firmly closed, with carved star symbols. On the stage, right of center, stands a wooden post with a hanging lantern glowing warm gold, lighting the ground around it. The lower part of the image is darker foreground rocks and a small underground pool reflecting light. Dark but soft and reassuring. The stage is EMPTY: no people, no characters, no animals anywhere. No text, no UI."
+ },
+ {
+  "nom": "c4_fond",
+  "taille": "1024x1536",
+  "prompt": "Art for a premium 2.5D side-scrolling mobile adventure game for young children: polished painterly 3D render look, magical night forest world, saturated blues, violets and turquoise with warm golden glowing lights, bioluminescent mushrooms and flowers, fireflies, soft mist, cozy and wondrous, never scary. Vertical portrait composition. All important things stay in the central 60% of the width. A vast open moonlit meadow of soft tall grass on gentle rolling hills, a huge clear starry night sky filling the upper half of the image with a big moon, a few distant purple trees on the horizon. Across the middle of the image, slightly below center, a wide flat grassy rise like a stage. On it, right of center, stands a wooden post with a hanging lantern glowing warm gold, lighting the ground around it. The lower part of the image is foreground grass with closed pale flower buds and a few glowing plants. The stage is EMPTY: no people, no characters, no animals anywhere. No text, no UI."
+ },
+ {
+  "nom": "c5_fond",
+  "taille": "1024x1536",
+  "prompt": "Art for a premium 2.5D side-scrolling mobile adventure game for young children: polished painterly 3D render look, magical night forest world, saturated blues, violets and turquoise with warm golden glowing lights, bioluminescent mushrooms and flowers, fireflies, soft mist, cozy and wondrous, never scary. Vertical portrait composition. All important things stay in the central 60% of the width. A fairytale castle of pale stone with tall round towers and pointed blue roofs standing on top of a hill in the upper half of the image, centered, under a deep starry night sky. Its big arched front door is wide open with warm golden light pouring out, and all its windows glow warm gold. The towers have bare empty flagpoles with no flags. A winding stone path leads down from the door. Across the middle of the image, slightly below center, a wide flat stone terrace like a stage with a low wall behind it. The lower part of the image is foreground garden plants, glowing flowers and mushrooms. The stage is EMPTY: no people, no characters, no animals anywhere. No text, no UI."
+ },
+ {
+  "nom": "c1_nuit",
+  "taille": "1024x1536",
+  "source": "c1_fond",
+  "prompt": "Keep this image exactly the same: same composition, same framing, every object in the same place. Change only this: the hanging lantern is extinguished, its glass dark with no flame and no warm glow on the ground or the post. Almost no fireflies. The whole scene is dimmer, quieter and more desaturated, lit only by soft cool blue moonlight, glowing plants very faint. Still gentle and not scary. No characters, no text. The water is dark, flat and dull, with no sparkles."
+ },
+ {
+  "nom": "c2_nuit",
+  "taille": "1024x1536",
+  "source": "c2_fond",
+  "prompt": "Keep this image exactly the same: same composition, same framing, every object in the same place. Change only this: the hanging lantern is extinguished, its glass dark with no flame and no warm glow on the ground or the post. Almost no fireflies. The whole scene is dimmer, quieter and more desaturated, lit only by soft cool blue moonlight, glowing plants very faint. Still gentle and not scary. No characters, no text. The rainbow stays pale grey."
+ },
+ {
+  "nom": "c2_arc",
+  "taille": "1024x1536",
+  "source": "c2_fond",
+  "prompt": "Keep this image exactly the same: same composition, same framing, every object in the same place. Change only this: the grey rainbow has got all its colors back: seven bright vivid glowing bands, red, orange, yellow, green, blue, indigo, violet, softly lighting the clouds around it. The lantern stays lit. No characters, no text."
+ },
+ {
+  "nom": "c3_nuit",
+  "taille": "1024x1536",
+  "source": "c3_fond",
+  "prompt": "Keep this image exactly the same: same composition, same framing, every object in the same place. Change only this: the hanging lantern is extinguished, its glass dark with no flame and no warm glow on the ground or the post. Almost no fireflies. The whole scene is dimmer, quieter and more desaturated, lit only by soft cool blue moonlight, glowing plants very faint. Still gentle and not scary. No characters, no text. The cave is quite dark but shapes remain visible in blue."
+ },
+ {
+  "nom": "c3_sortie",
+  "taille": "1024x1536",
+  "source": "c3_fond",
+  "prompt": "Keep this image exactly the same: same composition, same framing, every object in the same place. Change only this: the big round stone door in the back wall is now open: the round opening shows a beautiful deep blue night sky full of bright stars with a little moonlight shining into the cave. The lantern stays lit. No characters, no text."
+ },
+ {
+  "nom": "c4_nuit",
+  "taille": "1024x1536",
+  "source": "c4_fond",
+  "prompt": "Keep this image exactly the same: same composition, same framing, every object in the same place. Change only this: the hanging lantern is extinguished, its glass dark with no flame and no warm glow on the ground or the post. Almost no fireflies. The whole scene is dimmer, quieter and more desaturated, lit only by soft cool blue moonlight, glowing plants very faint. Still gentle and not scary. No characters, no text."
+ },
+ {
+  "nom": "c5_nuit",
+  "taille": "1024x1536",
+  "source": "c5_fond",
+  "prompt": "Keep this image exactly the same: same composition, same framing, every object in the same place. Change only this: the castle is asleep: its big front door is closed (dark wooden doors), all its windows are dark with no light, no golden glow on the path. Almost no fireflies. The whole scene is dimmer, quieter and more desaturated, lit only by soft cool blue moonlight, glowing plants very faint. Still gentle and not scary. No characters, no text."
+ },
+ {
+  "nom": "c5_drapeaux",
+  "taille": "1024x1536",
+  "source": "c5_fond",
+  "prompt": "Keep this image exactly the same: same composition, same framing, every object in the same place. Change only this: long colorful flags and pennants (red, yellow, pink, turquoise) are now flying on top of every tower of the castle, clearly visible and festive. The door stays open and the windows lit. No characters, no text."
+ },
+ {
+  "nom": "c1_nenuphars",
+  "transparent": true,
+  "prompt": "Single game prop sprite, isolated on a fully transparent background, no ground, no shadow, no scenery, no text. Polished painterly 3D render look for a premium children's mobile game, magical night palette, soft warm golden rim light from the right and cool blue moonlight from the left. A wide group of five round green lily pads floating in a loose horizontal line, seen slightly from above, two of them with a glowing pink water lily flower, tiny water ripples around each pad."
+ },
+ {
+  "nom": "c1_reinette",
+  "transparent": true,
+  "prompt": "Single game character sprite, full body, isolated on a fully transparent background, no ground, no shadow, no scenery, no text. Polished painterly 3D render look for a premium children's mobile game, magical night palette, soft warm golden rim light from the right and cool blue moonlight from the left. A small cute friendly green frog sitting, facing left, big kind eyes, happy smile, cheeks puffed as if singing."
+ },
+ {
+  "nom": "c1_poissons",
+  "transparent": true,
+  "prompt": "Single game prop sprite, isolated on a fully transparent background, no ground, no shadow, no scenery, no text. Polished painterly 3D render look for a premium children's mobile game, magical night palette, soft warm golden rim light from the right and cool blue moonlight from the left. Three cute little fish jumping out of the water in arcs, one orange, one yellow, one pink, shiny scales, with small sparkling water splashes and droplets."
+ },
+ {
+  "nom": "c2_pilou",
+  "transparent": true,
+  "prompt": "Single game character sprite, full body, isolated on a fully transparent background, no ground, no shadow, no scenery, no text. Polished painterly 3D render look for a premium children's mobile game, magical night palette, soft warm golden rim light from the right and cool blue moonlight from the left. A small round cute bright blue songbird perched, facing left, lighter blue belly, tiny orange beak, big kind eyes, cheerful."
+ },
+ {
+  "nom": "c2_etoiles",
+  "transparent": true,
+  "prompt": "Single game prop sprite, isolated on a fully transparent background, no ground, no shadow, no scenery, no text. Polished painterly 3D render look for a premium children's mobile game, magical night palette, soft warm golden rim light from the right and cool blue moonlight from the left. A wide horizontal scatter of about twelve bright twinkling golden-white stars of different sizes with soft glow and sparkles, spread across the whole width."
+ },
+ {
+  "nom": "c3_cristaux",
+  "transparent": true,
+  "prompt": "Single game prop sprite, isolated on a fully transparent background, no ground, no shadow, no scenery, no text. Polished painterly 3D render look for a premium children's mobile game, magical night palette, soft warm golden rim light from the right and cool blue moonlight from the left. A cluster of tall glowing magic crystals growing from a small rock base, in turquoise, violet and pink, shining brightly from inside with sparkles."
+ },
+ {
+  "nom": "c3_braise",
+  "transparent": true,
+  "prompt": "Single game character sprite, full body, isolated on a fully transparent background, no ground, no shadow, no scenery, no text. Polished painterly 3D render look for a premium children's mobile game, magical night palette, soft warm golden rim light from the right and cool blue moonlight from the left. A cute chubby baby dragon sitting, facing left, purple scales with a cream belly, small wings, tiny horns, big kind shy eyes, sweet smile."
+ },
+ {
+  "nom": "c3_tresor",
+  "transparent": true,
+  "prompt": "Single game prop sprite, isolated on a fully transparent background, no ground, no shadow, no scenery, no text. Polished painterly 3D render look for a premium children's mobile game, magical night palette, soft warm golden rim light from the right and cool blue moonlight from the left. A small pile of shiny colorful precious gems, red, green, blue, yellow and purple, sparkling."
+ },
+ {
+  "nom": "c4_fleurs",
+  "transparent": true,
+  "prompt": "Single game prop sprite, isolated on a fully transparent background, no ground, no shadow, no scenery, no text. Polished painterly 3D render look for a premium children's mobile game, magical night palette, soft warm golden rim light from the right and cool blue moonlight from the left. A wide low horizontal row of ten open glowing moon flowers, white and pale blue petals shining softly like little moons, on green stems with leaves, seen from the side."
+ },
+ {
+  "nom": "c4_nuage",
+  "transparent": true,
+  "prompt": "Single game character sprite, full body, isolated on a fully transparent background, no ground, no shadow, no scenery, no text. Polished painterly 3D render look for a premium children's mobile game, magical night palette, soft warm golden rim light from the right and cool blue moonlight from the left. A graceful gentle white unicorn standing, facing left, long flowing mane and tail in pastel pink, lavender and sky blue, golden spiral horn, kind eyes."
+ },
+ {
+  "nom": "c4_flocon",
+  "transparent": true,
+  "prompt": "Single game character sprite, full body, isolated on a fully transparent background, no ground, no shadow, no scenery, no text. Polished painterly 3D render look for a premium children's mobile game, magical night palette, soft warm golden rim light from the right and cool blue moonlight from the left. A tiny adorable baby unicorn foal standing on wobbly legs, facing right, white fluffy coat, short pastel pink and blue mane, small golden horn, sleepy happy eyes."
+ },
+ {
+  "nom": "c4_filantes",
+  "transparent": true,
+  "prompt": "Single game prop sprite, isolated on a fully transparent background, no ground, no shadow, no scenery, no text. Polished painterly 3D render look for a premium children's mobile game, magical night palette, soft warm golden rim light from the right and cool blue moonlight from the left. Four bright shooting stars with long glowing golden-white trails streaking diagonally from upper left to lower right, spread apart, with sparkles."
+ },
+ {
+  "nom": "c5_etoile",
+  "transparent": true,
+  "prompt": "Single game prop sprite, isolated on a fully transparent background, no ground, no shadow, no scenery, no text. Polished painterly 3D render look for a premium children's mobile game, magical night palette, soft warm golden rim light from the right and cool blue moonlight from the left. One big magical five-pointed star lantern glowing intensely warm gold and white, with long soft rays of light and sparkles all around it."
+ },
+ {
+  "nom": "c2_pont",
+  "taille": "1024x1536",
+  "source": "c2_arc",
+  "prompt": "Keep this image exactly the same: same composition, same framing, every object in the same place, same colorful rainbow. Change only this: the old stone bridge is now illuminated, with a row of many small glowing golden lanterns hanging all along its parapet and warm golden light on its stones and walkway, their lights reflected in the river below. No characters, no text."
+ }
+]

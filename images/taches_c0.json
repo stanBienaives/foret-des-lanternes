@@ -1,0 +1,38 @@
+[
+ {
+  "nom": "c0_fond",
+  "taille": "1024x1536",
+  "prompt": "Art for a premium 2.5D side-scrolling mobile adventure game for young children: polished painterly 3D render look, magical night forest, saturated blues, violets and turquoise with warm golden glowing lights, bioluminescent mushrooms and flowers, fireflies, soft mist, cozy and wondrous, never scary. Vertical portrait composition of an enchanted forest clearing under a huge bright full moon in the upper third of the image, starry sky, purple-blossomed trees with tiny lit windows framing left and right, distant waterfalls. Across the middle of the image, slightly below center, a wide flat mossy ground ledge like a stage, EMPTY, with no characters and no animals on it. On the right side of that ledge stands a wooden post with a hanging lantern glowing warm gold, lighting the moss around it. The lower quarter of the image is darker foreground: big leaves, glowing mushrooms, a still pond reflecting lights. No people, no animals, no text, no UI."
+ },
+ {
+  "nom": "c0_lou",
+  "transparent": true,
+  "prompt": "Single game character sprite, full body, isolated on a fully transparent background, no ground, no shadow, no scenery, no text. Polished painterly 3D render look for a premium children's mobile game, soft rim light from a warm golden lantern on the right and cool blue moonlight from the left. A five-year-old child standing, seen in three-quarter view facing right, wearing a deep blue hooded cape sprinkled with little golden stars, hood up, brown hair peeking out, small brown boots, curious gentle smile, looking slightly up."
+ },
+ {
+  "nom": "c0_plume",
+  "transparent": true,
+  "prompt": "Single game character sprite, full body, isolated on a fully transparent background, no ground, no shadow, no scenery, no text. Polished painterly 3D render look for a premium children's mobile game, soft rim light from a warm golden lantern on the right and cool blue moonlight from the left. A tiny cute firefly fairy flying, facing left, round friendly face, translucent shimmering wings, pink petal dress, golden hair, her whole body softly glowing warm yellow with a few sparkles around her."
+ },
+ {
+  "nom": "c0_roux",
+  "transparent": true,
+  "prompt": "Single game character sprite, full body, isolated on a fully transparent background, no ground, no shadow, no scenery, no text. Polished painterly 3D render look for a premium children's mobile game, soft rim light from a warm golden lantern on the right and cool blue moonlight from the left. A small friendly red fox cub sitting, facing left and looking up, fluffy tail with white tip, big kind eyes, happy expression."
+ },
+ {
+  "nom": "c0_fleurs",
+  "transparent": true,
+  "prompt": "Single game prop sprite, isolated on a fully transparent background, no ground, no shadow, no scenery, no text. Polished painterly 3D render look for a premium children's mobile game, soft rim light from a warm golden lantern on the right and cool blue moonlight from the left. A low horizontal cluster of softly glowing magical wildflowers in pink, yellow and lavender with green leaves, seen from the side, wide and short."
+ },
+ {
+  "nom": "c0_papillons",
+  "transparent": true,
+  "prompt": "Single game prop sprite, isolated on a fully transparent background, no ground, no shadow, no scenery, no text. Polished painterly 3D render look for a premium children's mobile game, soft rim light from a warm golden lantern on the right and cool blue moonlight from the left. Three glowing butterflies in flight spread apart, one pink, one light blue, one golden yellow, delicate luminous wings, a few sparkles."
+ },
+ {
+  "nom": "c0_nuit",
+  "taille": "1024x1536",
+  "source": "c0_fond",
+  "prompt": "Keep this image exactly the same: same composition, same trees, same moon, same mossy ledge, same wooden post and lantern in the same place, same pond and foreground plants. Change only the lighting: the hanging lantern is extinguished, its glass dark with no flame and no warm glow on the moss or the post. The little windows in the trees are dark. Almost no fireflies. The whole forest is dimmer, quieter and more desaturated, lit only by soft cool blue moonlight, the glowing mushrooms very faint. Still gentle and not scary. No characters, no text."
+ }
+]
