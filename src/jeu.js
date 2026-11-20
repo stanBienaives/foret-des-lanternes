@@ -281,11 +281,11 @@ addEventListener("pointermove",e=>{decorEl.style.setProperty("--px",(e.clientX/i
    Après `delai` ms (la fin de la phrase dite), il se met à bondir et un doigt le montre. */
 function goBtn(label,fn,delai){
   const b=h("button",{class:"big go","aria-label":label,title:label,onclick:fn});
-  b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l11-6.5a1 1 0 0 0 0-1.72l-11-6.5A1 1 0 0 0 8 5.5z"/></svg><i class="doigt" aria-hidden="true">👈</i>';
+  b.innerHTML='<svg viewBox="2.6 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l11-6.5a1 1 0 0 0 0-1.72l-11-6.5A1 1 0 0 0 8 5.5z"/></svg><i class="doigt" aria-hidden="true">👈</i>';
   setTimeout(()=>b.classList.add("appel"),delai||0);
   return b;
 }
-const LANTSVG='<svg viewBox="0 0 60 82" aria-hidden="true"><circle class="a" cx="30" cy="9" r="6"/><path class="m" d="M15 24l7-10h16l7 10z"/><rect class="v" x="11" y="24" width="38" height="44" rx="10"/><path class="m" d="M13 68h34l-4 9H17z"/></svg>';
+const lantHTML=allumee=>`<img alt="" draggable="false" src="${imgSrc(allumee?"ui_lant_on":"ui_lant_off")}">`;
 function storyPages(pages,onEnd){
   let i=0;
   const show=()=>{const p=pages[i],im=decor(p.ci,p.got,p.pop);
@@ -329,8 +329,8 @@ function showMap(){
         pages.push({ci:k,got:gotOf(k),text:st.pre,clip:`pre_${k}_${st.si}`,btn:"C’est parti !"});
         storyPages(pages,()=>startStop(st));
       }},h("span",{class:"lant"}),h("span",{class:"ic"},icon));
-      b.firstChild.innerHTML=LANTSVG;
-      const el=h("div",{class:"stop "+state},b,state==="now"?h("i",{class:"doigt","aria-hidden":"true"},"👆"):null);if(i===ci)nowEl=el;return el;}));
+      b.firstChild.innerHTML=lantHTML(state==="done"||state==="now");
+      const el=h("div",{class:"stop "+state},b);if(i===ci)nowEl=el;return el;}));
     book.append(h("section",{class:"chapter"+(open?"":" closed")},
       sceneBox(k,gotOf(k),null,"button",{"aria-label":c.n,onclick:()=>{if(open)say("in_"+k);else{fx.no();say("pasencore");}}}),
       h("h3",null,`${k+1}. ${c.n}`),row));
