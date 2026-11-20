@@ -277,13 +277,22 @@ function decor(ci,got,pop,flou){
   return true;
 }
 addEventListener("pointermove",e=>{decorEl.style.setProperty("--px",(e.clientX/innerWidth*2-1).toFixed(2));decorEl.style.setProperty("--py",(e.clientY/innerHeight*2-1).toFixed(2));},{passive:true});
+/* Bouton « continuer » pour une enfant qui ne lit pas : un gros rond doré avec une flèche, sans texte.
+   Après `delai` ms (la fin de la phrase dite), il se met à bondir et un doigt le montre. */
+function goBtn(label,fn,delai){
+  const b=h("button",{class:"big go","aria-label":label,title:label,onclick:fn});
+  b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l11-6.5a1 1 0 0 0 0-1.72l-11-6.5A1 1 0 0 0 8 5.5z"/></svg><i class="doigt" aria-hidden="true">👈</i>';
+  setTimeout(()=>b.classList.add("appel"),delai||0);
+  return b;
+}
+const LANTSVG='<svg viewBox="0 0 60 82" aria-hidden="true"><circle class="a" cx="30" cy="9" r="6"/><path class="m" d="M15 24l7-10h16l7 10z"/><rect class="v" x="11" y="24" width="38" height="44" rx="10"/><path class="m" d="M13 68h34l-4 9H17z"/></svg>';
 function storyPages(pages,onEnd){
   let i=0;
   const show=()=>{const p=pages[i],im=decor(p.ci,p.got,p.pop);
     setScreen("story",h("section",{class:"story"+(im?" imm":"")},
       im?null:sceneBox(p.ci,p.got,p.pop),
       h("div",{class:"storytext"},h("button",{class:"ico","aria-label":"Réécouter",onclick:()=>say(p.clip)},"🔊"),h("p",null,T(p.text))),
-      h("button",{class:"big",onclick:()=>{fx.pop();i++;if(i<pages.length)show();else onEnd();}},p.btn||"Continuer")));
+      goBtn(p.btn||"Continuer",()=>{fx.pop();i++;if(i<pages.length)show();else onEnd();},(p.win?750:300)+(S.vm==="off"?1500:clipDur(p.clip)*1000))));
     if(p.win)fx.win();
     const t=tok;setTimeout(()=>{if(t===tok)say(p.clip);},p.win?750:300);
   };
@@ -295,13 +304,13 @@ function showStart(){
   setScreen("start",h("section",{class:"story"+(im?" imm titre":"")},
     im?null:sceneBox(ci,gotOf(ci)),
     h("h1",null,T("Lou et la forêt des lanternes")),
-    h("button",{class:"big",onclick:()=>{
+    goBtn(doneCount()?"Continuer l’histoire":"Commencer l’histoire",()=>{
       fx.pop();
       if(timeUp()) return showSleep();
       if(!S.seen){
         storyPages(PRO.map((t,k)=>({ci:0,got:new Set(),text:t,clip:"pro_"+k})),()=>{S.seen=true;saveLocal();pushRemote();showMap();say("touche");});
       }else{showMap();say((S.name||"").trim().toLowerCase()==="lou"?"bonjour_lou":"bonjour","touche");}
-    }},doneCount()?"Continuer l’histoire":"Commencer l’histoire")));
+    },1500)));
 }
 
 function showMap(){
@@ -319,8 +328,9 @@ function showMap(){
         if(st.si===0) pages.push({ci:k,got:gotOf(k),text:c.intro,clip:"in_"+k});
         pages.push({ci:k,got:gotOf(k),text:st.pre,clip:`pre_${k}_${st.si}`,btn:"C’est parti !"});
         storyPages(pages,()=>startStop(st));
-      }},icon);
-      const el=h("div",{class:"stop "+state},b);if(i===ci)nowEl=el;return el;}));
+      }},h("span",{class:"lant"}),h("span",{class:"ic"},icon));
+      b.firstChild.innerHTML=LANTSVG;
+      const el=h("div",{class:"stop "+state},b,state==="now"?h("i",{class:"doigt","aria-hidden":"true"},"👆"):null);if(i===ci)nowEl=el;return el;}));
     book.append(h("section",{class:"chapter"+(open?"":" closed")},
       sceneBox(k,gotOf(k),null,"button",{"aria-label":c.n,onclick:()=>{if(open)say("in_"+k);else{fx.no();say("pasencore");}}}),
       h("h3",null,`${k+1}. ${c.n}`),row));
